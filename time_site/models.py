@@ -16,17 +16,28 @@ class CustomUser(AbstractUser):
         validators=[validate_email_unique]
     )
 
-    descripion = models.TextField(
-        _('descripion'),
+    ROLE_CHOICES = [
+        ('Сотрудник', 'Сотрудник'),
+        ('Руководитель', 'Руководитель'),
+        ('Администратор', 'Администратор'),
+    ]
+
+    role = models.CharField(
+        _('role'),
+        max_length=50,
+        choices=ROLE_CHOICES,
+        default='Сотрудник'
+    )
+
+    post = models.CharField(
+        _('post'),
+        max_length=100,
         blank=True
     )
 
-    role = models.TextField(
-        _('role'),
-    )
-
-    post = models.TextField(
-        _('post'),
+    description = models.TextField(
+        _('description'),
+        blank=True
     )
 
     def save(self, *args, **kwargs):

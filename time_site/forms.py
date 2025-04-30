@@ -25,4 +25,27 @@ class LoginForm(AuthenticationForm):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('descripion', 'role', 'post')
+        fields = ('description', 'role', 'post')
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3
+            }),
+            'role': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'post': forms.TextInput(attrs={
+                'class': 'form-control'
+            })
+        }
+
+        labels = {
+            'description': 'О себе',
+            'role': 'Роль',
+            'post': 'Должность'
+        }
+
+    role = forms.ChoiceField(
+        choices=CustomUser.ROLE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )

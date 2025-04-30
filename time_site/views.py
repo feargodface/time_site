@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, 'time_site/home.html')
@@ -30,3 +31,14 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'accounts/auth/register.html', {'form': form})
+
+@login_required
+def profile_view(request):
+    user = request.user
+    context = {
+        'user': user,
+        'role': user.role,
+        'post': user.post,
+        'description': user.descripion
+    }
+    return render(request, 'accounts/profile/view.html', context)
