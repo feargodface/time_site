@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+        color: white;
+        padding: 5rem 0;
+        border-radius: 0.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .feature-card {
+        border: none;
+        border-radius: 0.5rem;
+        transition: transform 0.3s;
+        height: 100%;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .action-buttons .btn {
+        min-width: 200px;
+        margin: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Добро пожаловать в TimeTrack</h1>
+        <p class="lead">Профессиональная система учета рабочего времени</p>
+
+        <div class="action-buttons mt-4">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile_view' %}" class="btn btn-light btn-lg">
+                    <i class="bi bi-speedometer2"></i> Панель управления
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-light btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Войти в систему
+                </a>
+                <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-person-plus"></i> Зарегистрироваться
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card feature-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-clock-history display-4 text-primary mb-3"></i>
+                    <h3>Учет времени</h3>
+                    <p>Точный контроль рабочего времени сотрудников</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card feature-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-bar-chart-line display-4 text-primary mb-3"></i>
+                    <h3>Отчеты</h3>
+                    <p>Детальная аналитика и отчетность</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card feature-card">
+                <div class="card-body text-center">
+                    <i class="bi bi-shield-lock display-4 text-primary mb-3"></i>
+                    <h3>Безопасность</h3>
+                    <p>Защита ваших данных</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

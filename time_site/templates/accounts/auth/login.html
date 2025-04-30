@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Вход в систему | TimeTrack{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-container {
+        max-width: 450px;
+        margin: 3rem auto;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+    }
+
+    .auth-container h2 {
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .auth-form .form-control {
+        height: 45px;
+        border-radius: 0.375rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .auth-form .btn {
+        height: 45px;
+        width: 100%;
+        border-radius: 0.375rem;
+        font-weight: 600;
+    }
+
+    .auth-switch {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e3e6f0;
+        text-align: center;
+    }
+
+    .auth-switch a {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Вход в систему</h2>
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">Логин</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Войти</button>
+    </form>
+    <div class="auth-switch">
+        <p>Нет аккаунта? <a href="{% url 'register' %}">Создать аккаунт</a></p>
+    </div>
+</div>
+{% endblock %}
