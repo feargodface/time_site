@@ -3,6 +3,9 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from .models import CustomUser
+from django.shortcuts import get_object_or_404
+
 
 def home(request):
     return render(request, 'time_site/home.html')
@@ -19,7 +22,7 @@ def login_view(request):
                 return redirect('home')
     else:
         form = AuthenticationForm()
-    return render(request, 'accounts/auth/login.html', {'form': form})
+    return render(request, 'auth/login.html', {'form': form})
 
 def register_view(request):
     if request.method == 'POST':
@@ -30,15 +33,5 @@ def register_view(request):
             return redirect('home')
     else:
         form = UserCreationForm()
-    return render(request, 'accounts/auth/register.html', {'form': form})
+    return render(request, 'auth/register.html', {'form': form})
 
-@login_required
-def profile_view(request):
-    user = request.user
-    context = {
-        'user': user,
-        'role': user.role,
-        'post': user.post,
-        'description': user.descripion
-    }
-    return render(request, 'accounts/profile/view.html', context)

@@ -25,27 +25,31 @@ class LoginForm(AuthenticationForm):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('description', 'role', 'post')
+        fields = ['first_name', 'last_name', 'email', 'post', 'phone', 'description', 'department', 'hire_date', 'role']
         widgets = {
-            'description': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3
-            }),
-            'role': forms.TextInput(attrs={
-                'class': 'form-control'
-            }),
-            'post': forms.TextInput(attrs={
-                'class': 'form-control'
-            })
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'post': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-control'}),
+            'hire_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'role': forms.Select(attrs={'class': 'form-control'}),
         }
 
-        labels = {
-            'description': 'О себе',
-            'role': 'Роль',
-            'post': 'Должность'
-        }
+    def __init__(self, *args, **kwargs):
+        is_admin = kwargs.pop('is_admin', False)
+        super().__init__(*args, **kwargs)
+        if not is_admin:
+            self.fields.pop('role')
 
-    role = forms.ChoiceField(
-        choices=CustomUser.ROLE_CHOICES,
-        widget=forms.Select(attrs={'class': 'form-select'})
-    )
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        current_user = self.instance  # Получаем текущего пользователя (профиль)
+
+        # Проверяем, не совпадает ли новый email с текущим
+        if email != current_user.email and CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("Этот email уже занят")
+
+        return email

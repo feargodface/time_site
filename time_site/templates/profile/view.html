@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Профиль {{ user.username }}</h2>
+
+    <div class="profile-view-container">
+        <div class="profile-view-info">
+            <div class="info-item">
+                <span class="label">Имя:</span>
+                <span class="value">{{ user.first_name }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Фамилия:</span>
+                <span class="value">{{ user.last_name }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Email:</span>
+                <span class="value">{{ user.email }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Телефон:</span>
+                <span class="value">{{ user.phone }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Должность:</span>
+                <span class="value">{{ user.post }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Отдел:</span>
+                <span class="value">{{ department_display }}</span>
+            </div>
+
+            {% if role_display %}
+            <div class="info-item">
+                <span class="label">Роль:</span>
+                <span class="value">{{ role_display }}</span>
+            </div>
+            {% endif %}
+
+            <div class="info-item">
+                <span class="label">Описание:</span>
+                <span class="value">{{ user.description }}</span>
+            </div>
+        </div>
+
+        <div class="profile-view-actions">
+            <a href="javascript:history.back()" class="btn btn-secondary">Назад</a>
+            {% if is_own_profile %}
+            <a href="{% url 'profile_edit' %}" class="btn btn-primary">Редактировать</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

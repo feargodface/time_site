@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Профиль пользователя: {{ user_profile.get_full_name|default:user_profile.username }}</h2>
+  <p><strong>Email:</strong> {{ user_profile.email }}</p>
+  <p><strong>Роль:</strong> {{ user_profile.role }}</p>
+  <p><strong>Должность:</strong> {{ user_profile.post }}</p>
+  <p><strong>Отдел:</strong> {{ user_profile.department }}</p>
+  <p><strong>Телефон:</strong> {{ user_profile.phone }}</p>
+  <p><strong>Дата приёма на работу:</strong> {{ user_profile.hire_date }}</p>
+  <p><strong>Описание:</strong> {{ user_profile.description }}</p>
+{% endblock %}

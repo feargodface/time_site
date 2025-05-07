@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Отдел: {{ department.name }}</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            {% if managers %}
+                <h4>Руководитель(и):</h4>
+                <ul class="list-group">
+                    {% for manager in managers %}
+                        <li class="list-group-item">
+                            <a href="{% url 'public_profile' user_id=manager.id %}">{{ manager.get_full_name|default:manager.username }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+        <div class="col-md-6">
+            <h4>Сотрудники:</h4>
+            <ul class="list-group">
+                {% for employee in employees %}
+                    {% if employee not in managers %}
+                        <li class="list-group-item">
+                            <a href="{% url 'public_profile' user_id=employee.id %}">{{ employee.get_full_name|default:employee.username }}</a>
+                        </li>
+                    {% endif %}
+                {% empty %}
+                    <li class="list-group-item">Нет сотрудников в этом отделе</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-4 text-center">
+        <!-- Кнопка назад -->
+        <a href="{% url 'department_list' %}" class="btn btn-primary">Назад к списку отделов</a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+    <style>
+        /* Добавляем стили для страницы */
+        .container {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        h4 {
+            color: #0056b3;
+        }
+
+        .list-group-item {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+{% endblock %}

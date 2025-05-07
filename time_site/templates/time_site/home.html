@@ -42,12 +42,8 @@
                 <a href="{% url 'profile_view' %}" class="btn btn-light btn-lg">
                     <i class="bi bi-speedometer2"></i> Панель управления
                 </a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn btn-light btn-lg">
-                    <i class="bi bi-box-arrow-in-right"></i> Войти в систему
-                </a>
-                <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg">
-                    <i class="bi bi-person-plus"></i> Зарегистрироваться
+                <a href="{% url 'department_list' %}" class="btn btn-info btn-lg">
+                    <i class="bi bi-people"></i> Отделы
                 </a>
             {% endif %}
         </div>
@@ -78,8 +74,8 @@
             <div class="card feature-card">
                 <div class="card-body text-center">
                     <i class="bi bi-shield-lock display-4 text-primary mb-3"></i>
-                    <h3>Безопасность</h3>
-                    <p>Защита ваших данных</p>
+                    <h3>Статистика</h3>
+                    <p>Просмотр статистики за последний месяц</p>
                 </div>
             </div>
         </div>

@@ -19,7 +19,7 @@ def register_view(request):
                     messages.error(request, f"{error}")
     else:
         form = RegisterForm()
-    return render(request, 'accounts/auth/register.html', {'form': form})
+    return render(request, 'auth/register.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
@@ -36,7 +36,7 @@ def login_view(request):
             messages.error(request, "Неверный логин или пароль")
     else:
         form = AuthenticationForm()
-    return render(request, 'accounts/auth/login.html', {'form': form})
+    return render(request, 'auth/login.html', {'form': form})
 
 def logout_action(request):
     if request.user.is_authenticated:

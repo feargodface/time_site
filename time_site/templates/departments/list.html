@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Отделы</h2>
+    <ul>
+        {% for dept in departments %}
+            <li><a href="{% url 'department_detail' dept.pk %}">{{ dept.name }}</a></li>
+        {% empty %}
+            <li>Нет отделов</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
