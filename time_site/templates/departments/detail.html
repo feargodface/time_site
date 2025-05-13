@@ -1,84 +1,116 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+<style>
+    .department-detail-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .department-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #333;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .person-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .person-list li {
+        background: var(--secondary-color);
+        border-left: 4px solid var(--primary-color);
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+    }
+
+    .person-list li:hover {
+        background-color: #eef1f9;
+    }
+
+    .person-list a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .person-list a:hover {
+        color: var(--primary-color);
+    }
+
+    .back-button {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .back-button .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Отдел: {{ department.name }}</h2>
+<div class="department-detail-container">
+    <h2 class="department-title">Отдел: {{ department.name }}</h2>
 
     <div class="row">
+        {% if managers %}
         <div class="col-md-6">
-            {% if managers %}
-                <h4>Руководитель(и):</h4>
-                <ul class="list-group">
-                    {% for manager in managers %}
-                        <li class="list-group-item">
-                            <a href="{% url 'public_profile' user_id=manager.id %}">{{ manager.get_full_name|default:manager.username }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
+            <h4 class="section-title">Руководитель(и):</h4>
+            <ul class="person-list">
+                {% for manager in managers %}
+                    <li>
+                        <a href="{% url 'public_profile' user_id=manager.id %}">
+                            {{ manager.get_full_name|default:manager.username }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
+        {% endif %}
 
         <div class="col-md-6">
-            <h4>Сотрудники:</h4>
-            <ul class="list-group">
+            <h4 class="section-title">Сотрудники:</h4>
+            <ul class="person-list">
                 {% for employee in employees %}
                     {% if employee not in managers %}
-                        <li class="list-group-item">
-                            <a href="{% url 'public_profile' user_id=employee.id %}">{{ employee.get_full_name|default:employee.username }}</a>
+                        <li>
+                            <a href="{% url 'public_profile' user_id=employee.id %}">
+                                {{ employee.get_full_name|default:employee.username }}
+                            </a>
                         </li>
                     {% endif %}
                 {% empty %}
-                    <li class="list-group-item">Нет сотрудников в этом отделе</li>
+                    <li class="text-muted">Нет сотрудников в этом отделе</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 
-    <div class="mt-4 text-center">
-        <!-- Кнопка назад -->
-        <a href="{% url 'department_list' %}" class="btn btn-primary">Назад к списку отделов</a>
+    <div class="back-button">
+        <a href="{% url 'department_list' %}" class="btn btn-primary">
+            ← Назад к списку отделов
+        </a>
     </div>
 </div>
-
-{% endblock %}
-
-{% block styles %}
-    <style>
-        /* Добавляем стили для страницы */
-        .container {
-            background-color: #f9f9f9;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        h2 {
-            color: #333;
-        }
-
-        h4 {
-            color: #0056b3;
-        }
-
-        .list-group-item {
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            padding: 10px 20px;
-            text-align: center;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-    </style>
 {% endblock %}

@@ -1,12 +1,95 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+<style>
+    .public-profile-container {
+        max-width: 700px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .public-profile-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .profile-info-item {
+        margin-bottom: 1rem;
+        padding: 0.75rem 1rem;
+        background-color: var(--secondary-color);
+        border-left: 4px solid var(--primary-color);
+        border-radius: 6px;
+    }
+
+    .profile-info-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .profile-info-value {
+        color: #555;
+        margin-left: 0.5rem;
+    }
+
+    .back-button-container {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+</style>
+{% endblock %}
+
 {% block content %}
-  <h2>Профиль пользователя: {{ user_profile.get_full_name|default:user_profile.username }}</h2>
-  <p><strong>Email:</strong> {{ user_profile.email }}</p>
-  <p><strong>Роль:</strong> {{ user_profile.role }}</p>
-  <p><strong>Должность:</strong> {{ user_profile.post }}</p>
-  <p><strong>Отдел:</strong> {{ user_profile.department }}</p>
-  <p><strong>Телефон:</strong> {{ user_profile.phone }}</p>
-  <p><strong>Дата приёма на работу:</strong> {{ user_profile.hire_date }}</p>
-  <p><strong>Описание:</strong> {{ user_profile.description }}</p>
+<div class="public-profile-container">
+    <h2 class="public-profile-title">
+        Профиль пользователя: {{ user_profile.get_full_name|default:user_profile.username }}
+    </h2>
+
+    <div class="profile-info-item">
+        <span class="profile-info-label">Email:</span>
+        <span class="profile-info-value">{{ user_profile.email }}</span>
+    </div>
+
+    <div class="profile-info-item">
+        <span class="profile-info-label">Роль:</span>
+        <span class="profile-info-value">{{ user_profile.role }}</span>
+    </div>
+
+    <div class="profile-info-item">
+        <span class="profile-info-label">Должность:</span>
+        <span class="profile-info-value">{{ user_profile.post }}</span>
+    </div>
+
+    <div class="profile-info-item">
+        <span class="profile-info-label">Отдел:</span>
+        <span class="profile-info-value">{{ user_profile.department }}</span>
+    </div>
+
+    <div class="profile-info-item">
+        <span class="profile-info-label">Телефон:</span>
+        <span class="profile-info-value">{{ user_profile.phone }}</span>
+    </div>
+
+    <div class="profile-info-item">
+        <span class="profile-info-label">Дата приёма на работу:</span>
+        <span class="profile-info-value">{{ user_profile.hire_date }}</span>
+    </div>
+
+    <div class="profile-info-item">
+        <span class="profile-info-label">Описание:</span>
+        <span class="profile-info-value">{{ user_profile.description }}</span>
+    </div>
+
+    <div class="back-button-container">
+        <a href="javascript:history.back()" class="btn-back">
+            ← Вернуться обратно
+        </a>
+    </div>
+</div>
 {% endblock %}

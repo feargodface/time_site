@@ -50,9 +50,13 @@
         </div>
 
         <div class="profile-view-actions">
-            <a href="javascript:history.back()" class="btn btn-secondary">Назад</a>
+
+            <a href="javascript:history.back()" class="btn-back">
+                ← Вернуться обратно
+            </a>
+
             {% if is_own_profile %}
-            <a href="{% url 'profile_edit' %}" class="btn btn-primary">Редактировать</a>
+            <a href="{% url 'profile_edit' %}" class="btn btn-back">Редактировать</a>
             {% endif %}
         </div>
     </div>

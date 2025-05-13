@@ -1,13 +1,71 @@
 {% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+    .departments-container {
+        max-width: 700px;
+        margin: 2rem auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .departments-container h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .department-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .department-list li {
+        margin-bottom: 1rem;
+    }
+
+    .department-list a {
+        display: block;
+        padding: 1rem 1.25rem;
+        background-color: var(--secondary-color);
+        border-left: 5px solid var(--primary-color);
+        border-radius: 0.5rem;
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .department-list a:hover {
+        background-color: #e9ecf6;
+        transform: translateX(4px);
+        color: var(--primary-color);
+    }
+
+    .department-empty {
+        color: #888;
+        text-align: center;
+        font-style: italic;
+        margin-top: 1rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
+<div class="departments-container">
     <h2>Отделы</h2>
-    <ul>
+    {% if departments %}
+    <ul class="department-list">
         {% for dept in departments %}
             <li><a href="{% url 'department_detail' dept.pk %}">{{ dept.name }}</a></li>
-        {% empty %}
-            <li>Нет отделов</li>
         {% endfor %}
     </ul>
+    {% else %}
+        <p class="department-empty">Нет отделов</p>
+    {% endif %}
 </div>
 {% endblock %}

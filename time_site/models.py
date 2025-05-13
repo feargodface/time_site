@@ -2,6 +2,10 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.conf import settings
+from datetime import datetime, date
+
+
 
 class Department(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -100,3 +104,57 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+class WorkLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
+    check_in = models.TimeField(null=True, blank=True, verbose_name="Вход")
+    check_out = models.TimeField(null=True, blank=True, verbose_name="Выход")
+    break_minutes = models.PositiveIntegerField(default=0, verbose_name="Перерыв (мин)")
+    note = models.TextField(blank=True, verbose_name="Примечание")
+
+    @property
+    def worked_time_minutes(self):
+        if self.check_in and self.check_out:
+            delta = datetime.combine(date.min, self.check_out) - datetime.combine(date.min, self.check_in)
+            return max((delta.total_seconds() // 60) - self.break_minutes, 0)
+        return 0
+
+    def __str__(self):
+        return f"{self.user.username} — {self.date}"
+
+    class Meta:
+        verbose_name = "Запись рабочего времени"
+        verbose_name_plural = "Рабочие записи"
+        unique_together = ['user', 'date']
+
+
+class LeaveRequest(models.Model):
+    TYPE_CHOICES = [
+        ('отпуск', 'Отпуск'),
+        ('отгул', 'Отгул'),
+        ('командировка', 'Командировка'),
+    ]
+
+    STATUS_CHOICES = [
+        ('на рассмотрении', 'На рассмотрении'),
+        ('одобрено', 'Одобрено'),
+        ('отклонено', 'Отклонено'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    leave_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    reason = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='на рассмотрении')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.leave_type} ({self.start_date} → {self.end_date})"
+
+    class Meta:
+        verbose_name = "Заявка"
+        verbose_name_plural = "Заявки"
+        ordering = ['-submitted_at']

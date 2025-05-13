@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Панель учета посещаемости</h4>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3" style="max-width: 400px;">
+          {{ form.date.label_tag }} {{ form.date }}
+        </div>
+        <div class="mb-3" style="max-width: 400px;">
+          {{ form.check_in.label_tag }} {{ form.check_in }}
+        </div>
+        <div class="mb-3" style="max-width: 400px;">
+          {{ form.check_out.label_tag }} {{ form.check_out }}
+        </div>
+        <div class="mb-3" style="max-width: 400px;">
+          {{ form.break_minutes.label_tag }} {{ form.break_minutes }}
+        </div>
+        <div class="mb-3" style="max-width: 400px;">
+          {{ form.note.label_tag }} {{ form.note }}
+        </div>
+        <button type="submit" class="btn btn-success">Сохранить запись</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-5">
+    <div class="card-header bg-light">
+      <h5 class="mb-0">Последние записи</h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-secondary">
+            <tr>
+              <th>Дата</th>
+              <th>Приход</th>
+              <th>Уход</th>
+              <th>Перерыв (мин)</th>
+              <th>Отработано (мин)</th>
+              <th>Примечание</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logs %}
+            <tr>
+              <td>{{ log.date }}</td>
+              <td>{{ log.check_in|default:"—" }}</td>
+              <td>{{ log.check_out|default:"—" }}</td>
+              <td>{{ log.break_minutes }}</td>
+              <td>{{ log.worked_time_minutes }}</td>
+              <td>{{ log.note|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center text-muted">Нет записей</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+    <hr>
+    <div class="mt-4">
+      <h5>Заявки и уведомления</h5>
+      <a href="{% url 'leave_form' %}" class="btn btn-outline-primary me-2">Подать заявку</a>
+      <a href="{% url 'leave_list' %}" class="btn btn-outline-secondary">Мои заявки</a>
+    </div>
+
+</div>
+{% endblock %}

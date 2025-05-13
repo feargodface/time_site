@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-4">
+    {% if edit %}
+      Редактировать заявку
+    {% else %}
+      Подать заявку на отпуск / отгул
+    {% endif %}
+  </h3>
+
+  <form method="post" class="p-4 border rounded bg-light shadow-sm">
+    {% csrf_token %}
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="id_leave_type" class="form-label">Тип заявки</label>
+        <select name="leave_type" id="id_leave_type" class="form-select">
+          {% for value, label in form.fields.leave_type.choices %}
+            <option value="{{ value }}" {% if form.leave_type.value == value %}selected{% endif %}>
+              {{ label }}
+            </option>
+          {% endfor %}
+        </select>
+        {% if form.leave_type.errors %}
+          <div class="text-danger">{{ form.leave_type.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="col-md-3">
+        <label for="id_start_date" class="form-label">Дата начала</label>
+        <input type="date" name="start_date" id="id_start_date"
+               value="{{ form.start_date.value|default_if_none:'' }}" class="form-control">
+        {% if form.start_date.errors %}
+          <div class="text-danger">{{ form.start_date.errors }}</div>
+        {% endif %}
+      </div>
+
+      <div class="col-md-3">
+        <label for="id_end_date" class="form-label">Дата окончания</label>
+        <input type="date" name="end_date" id="id_end_date"
+               value="{{ form.end_date.value|default_if_none:'' }}" class="form-control">
+        {% if form.end_date.errors %}
+          <div class="text-danger">{{ form.end_date.errors }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="id_reason" class="form-label">Причина</label>
+      <textarea name="reason" id="id_reason" class="form-control" rows="4">{{ form.reason.value }}</textarea>
+      {% if form.reason.errors %}
+        <div class="text-danger">{{ form.reason.errors }}</div>
+      {% endif %}
+    </div>
+    <button type="submit" class="btn btn-success">
+      {% if edit %}Сохранить изменения{% else %}Отправить заявку{% endif %}
+    </button>
+        <a href="javascript:history.back()" class="btn-back">
+            ← Вернуться обратно
+        </a>
+  </form>
+</div>
+{% endblock %}

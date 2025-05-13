@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Мои заявки</h3>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Тип</th>
+                <th>Период</th>
+                <th>Статус</th>
+                <th>Дата подачи</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for leave in leaves %}
+            <tr>
+                <td>{{ leave.get_leave_type_display }}</td>
+                <td>{{ leave.start_date }} – {{ leave.end_date }}</td>
+                <td>{{ leave.get_status_display }}</td>
+                <td>{{ leave.submitted_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                  {% if leave.status == 'на рассмотрении' %}
+                    <a href="{% url 'leave_edit' leave.pk %}" class="btn btn-sm btn-warning" title="Редактировать">✏️</a>
+                    <a href="{% url 'leave_delete' leave.pk %}" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Удалить эту заявку?');">🗑️</a>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Заявки отсутствуют</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="back-button-container">
+        <a href="javascript:history.back()" class="btn-back">
+            ← Вернуться обратно
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -27,7 +27,20 @@
         margin: 0.5rem;
         padding: 0.75rem 1.5rem;
         font-size: 1.1rem;
+        border-radius: 8px;
+        transition: background-color 0.3s, transform 0.2s;
     }
+
+    .btn-panel-soft {
+        background-color: #d1d1d1;
+        color: #323232;
+        border: none;
+    }
+
+    .btn-panel-soft:hover {
+        background-color: #b1b1b1;
+    }
+
 </style>
 {% endblock %}
 
@@ -36,15 +49,19 @@
     <div class="container">
         <h1 class="display-4 fw-bold">Добро пожаловать в TimeTrack</h1>
         <p class="lead">Профессиональная система учета рабочего времени</p>
-
         <div class="action-buttons mt-4">
             {% if user.is_authenticated %}
-                <a href="{% url 'profile_view' %}" class="btn btn-light btn-lg">
-                    <i class="bi bi-speedometer2"></i> Панель управления
+                <a href="{% url 'my_statistics' %}" class="btn btn-panel-soft">
+                    <i class="bi bi-bar-chart-line"></i> Панель управления
                 </a>
-                <a href="{% url 'department_list' %}" class="btn btn-info btn-lg">
+                <a href="{% url 'department_list' %}" class="btn btn-panel-soft">
                     <i class="bi bi-people"></i> Отделы
                 </a>
+                {% if user.role == "Руководитель" %}
+                    <a href="{% url 'leave_approval_list' %}" class="btn btn-panel-soft">
+                        <i class="bi bi-clipboard-check"></i> Просмотр заявок
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
     </div>

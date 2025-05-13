@@ -3,6 +3,11 @@ from .views import home
 from time_site.views.auth import login_view, register_view, logout_action
 from .views import departments as department_views
 from time_site.views.profile import profile_view, profile_edit, public_profile_view
+from time_site.views.statistics import my_statistics_view
+from time_site.views.leave import (
+    leave_form_view, leave_list_view, leave_edit_view, leave_delete_view,
+    leave_approval_list_view, approve_leave_view, reject_leave_view,
+)
 
 
 urlpatterns = [
@@ -19,4 +24,17 @@ urlpatterns = [
 
     path('departments/', department_views.department_list, name='department_list'),
     path('departments/<int:pk>/', department_views.department_detail, name='department_detail'),
+
+    path('statistics/', my_statistics_view, name='my_statistics'),
+
+    path('leave/request/', leave_form_view, name='leave_form'),
+    path('leave/my/', leave_list_view, name='leave_list'),
+    path('leave/<int:pk>/edit/', leave_edit_view, name='leave_edit'),
+    path('leave/<int:pk>/delete/', leave_delete_view, name='leave_delete'),
+
+
+    path('leave/approval/', leave_approval_list_view, name='leave_approval_list'),
+    path('leave/<int:pk>/approve/', approve_leave_view, name='leave_approve'),
+    path('leave/<int:pk>/reject/', reject_leave_view, name='leave_reject'),
+
 ]
