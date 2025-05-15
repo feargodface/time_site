@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    .error-container {
+        max-width: 600px;
+        margin: 5rem auto;
+        padding: 3rem;
+        background-color: #ffffff;
+        border-radius: 1rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        text-align: center;
+    }
+
+    .error-title {
+        font-size: 3rem;
+        color: #dc3545;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .error-message {
+        font-size: 1.2rem;
+        color: #444;
+        margin-bottom: 2rem;
+    }
+
+    .btn-home {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-home:hover {
+        background-color: var(--accent-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-title">Ошибка 403</div>
+    <p class="error-message">У вас нет прав для доступа к этой странице.<br>
+        Пожалуйста, вернитесь назад или свяжитесь с администратором.</p>
+    <a href="{% url 'home' %}" class="btn-home">На главную</a>
+</div>
+{% endblock %}

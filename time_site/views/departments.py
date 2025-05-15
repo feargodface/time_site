@@ -18,5 +18,7 @@ def department_detail(request, pk):
         'department': department,
         'managers': managers,
         'employees': employees,
+        'user': request.user,
     })
+
 

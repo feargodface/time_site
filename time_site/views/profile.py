@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from time_site.models import CustomUser
+from time_site.models import CustomUser, WorkLog
 from time_site.forms import ProfileEditForm
-from django.contrib import messages
+from django.utils.timezone import now, timedelta
 
 
 @login_required
@@ -42,4 +42,18 @@ def profile_edit(request):
 
 def public_profile_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
-    return render(request, 'profile/public_profile.html', {'user_profile': user})
+
+    period = request.GET.get('period', '30')  # по умолчанию 30 дней
+    try:
+        days = int(period)
+    except ValueError:
+        days = 30
+
+    start_date = now().date() - timedelta(days=days)
+    logs = WorkLog.objects.filter(user=user, date__gte=start_date).order_by('-date')
+
+    return render(request, 'profile/public_profile.html', {
+        'user_profile': user,
+        'logs': logs,
+        'selected_period': days,
+    })

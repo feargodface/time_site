@@ -3,46 +3,55 @@
 {% block extra_css %}
 <style>
     .departments-container {
-        max-width: 700px;
+        max-width: 600px;
         margin: 2rem auto;
-        background: white;
-        padding: 2rem;
-        border-radius: 0.75rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        background: #ffffff;
+        padding: 1.5rem 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
 
     .departments-container h2 {
-        font-size: 2rem;
-        font-weight: bold;
+        font-size: 1.75rem;
+        font-weight: 700;
         color: var(--primary-color);
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
         text-align: center;
     }
 
     .department-list {
         list-style: none;
         padding-left: 0;
+        margin-bottom: 0;
     }
 
     .department-list li {
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
 
     .department-list a {
-        display: block;
-        padding: 1rem 1.25rem;
-        background-color: var(--secondary-color);
-        border-left: 5px solid var(--primary-color);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background-color: #f5f7fa;
+        border-left: 4px solid var(--primary-color);
         border-radius: 0.5rem;
         text-decoration: none;
         color: #333;
         font-weight: 500;
-        transition: background-color 0.2s, transform 0.2s;
+        font-size: 1rem;
+        transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
     .department-list a:hover {
-        background-color: #e9ecf6;
-        transform: translateX(4px);
+        background-color: #eaf0f8;
+        transform: translateX(3px);
+        color: var(--primary-color);
+    }
+
+    .department-icon {
+        font-size: 1.1rem;
         color: var(--primary-color);
     }
 
@@ -61,7 +70,11 @@
     {% if departments %}
     <ul class="department-list">
         {% for dept in departments %}
-            <li><a href="{% url 'department_detail' dept.pk %}">{{ dept.name }}</a></li>
+        <li>
+            <a href="{% url 'department_detail' dept.pk %}">
+                <span class="department-icon">🏢</span> {{ dept.name }}
+            </a>
+        </li>
         {% endfor %}
     </ul>
     {% else %}

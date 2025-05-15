@@ -11,13 +11,15 @@
     <!-- Основные стили -->
     <style>
         :root {
-            --primary-color: #4e73df;
-            --secondary-color: #f8f9fc;
-            --accent-color: #2e59d9;
+            --primary-color: #44557c;
+            --secondary-color: #61667a;
+            --accent-color: #5359b5;
+            --background-color: #cfcfe6;
+            --header-bg: #3c425c;
         }
 
         body {
-            background-color: #f8f9fc;
+            background-color: var(--background-color);
             font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -156,8 +158,8 @@
 
         .btn-back {
             padding: 0.6rem 1.5rem;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: #a8b1c8;
+            color: var(--header-bg);
             border: none;
             border-radius: 6px;
             font-size: 1rem;
@@ -167,7 +169,8 @@
         }
 
         .btn-back:hover {
-            background-color: var(--accent-color);
+            background-color: #e0e7f4;
+            transform: translateX(-3px);
         }
         </style>
 
@@ -175,7 +178,7 @@
 </head>
 <body>
     <!-- Навигация -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <nav class="navbar navbar-expand-lg navbar-dark shadow" style="background-color: var(--header-bg);">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
                 <i class="bi bi-clock"></i> TimeTrack
@@ -236,7 +239,7 @@
     <!-- Подвал -->
     <footer class="mt-auto">
         <div class="container text-center">
-            <p class="text-muted mb-0">© {% now "Y" %} Система учёта рабочего времени</p>
+            <p class="text-white mb-0">© {% now "Y" %} Система учёта рабочего времени</p>
         </div>
     </footer>
 

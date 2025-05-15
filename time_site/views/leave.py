@@ -60,7 +60,6 @@ def leave_approval_list_view(request):
     if not request.user.is_manager:
         return HttpResponseForbidden("Доступ запрещён")
 
-    # Получаем сотрудников из отдела руководителя
     employees = CustomUser.objects.filter(department=request.user.department)
     leaves = LeaveRequest.objects.filter(user__in=employees).order_by('-submitted_at')
 

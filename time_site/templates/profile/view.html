@@ -1,64 +1,126 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+<style>
+    .profile-view-container {
+        max-width: 700px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .profile-view-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .info-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+        background-color: #f5f7fa;
+        border-left: 4px solid var(--primary-color);
+        border-radius: 0.5rem;
+    }
+
+    .info-item .label {
+        font-weight: 600;
+        color: #333;
+        margin-right: 0.5rem;
+    }
+
+    .info-item .value {
+        color: #555;
+    }
+
+    .profile-view-actions {
+        text-align: center;
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .btn-back {
+        display: inline-block;
+        padding: 0.6rem 1.4rem;
+        background-color: #a8b1c8;
+        color: var(--header-bg);
+        font-weight: 500;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-back:hover {
+        background-color: #e0e7f4;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Профиль {{ user.username }}</h2>
+<div class="profile-view-container">
+    <h2 class="profile-view-title">Профиль {{ user.get_full_name|default:user.username }}</h2>
 
-    <div class="profile-view-container">
-        <div class="profile-view-info">
-            <div class="info-item">
-                <span class="label">Имя:</span>
-                <span class="value">{{ user.first_name }}</span>
-            </div>
+    <div class="profile-view-info">
 
-            <div class="info-item">
-                <span class="label">Фамилия:</span>
-                <span class="value">{{ user.last_name }}</span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Email:</span>
-                <span class="value">{{ user.email }}</span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Телефон:</span>
-                <span class="value">{{ user.phone }}</span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Должность:</span>
-                <span class="value">{{ user.post }}</span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Отдел:</span>
-                <span class="value">{{ department_display }}</span>
-            </div>
-
-            {% if role_display %}
-            <div class="info-item">
-                <span class="label">Роль:</span>
-                <span class="value">{{ role_display }}</span>
-            </div>
-            {% endif %}
-
-            <div class="info-item">
-                <span class="label">Описание:</span>
-                <span class="value">{{ user.description }}</span>
-            </div>
+        <div class="info-item">
+            <span class="label">Имя:</span>
+            <span class="value">{{ user.first_name }}</span>
         </div>
 
-        <div class="profile-view-actions">
-
-            <a href="javascript:history.back()" class="btn-back">
-                ← Вернуться обратно
-            </a>
-
-            {% if is_own_profile %}
-            <a href="{% url 'profile_edit' %}" class="btn btn-back">Редактировать</a>
-            {% endif %}
+        <div class="info-item">
+            <span class="label">Фамилия:</span>
+            <span class="value">{{ user.last_name }}</span>
         </div>
+
+        <div class="info-item">
+            <span class="label">Email:</span>
+            <span class="value">{{ user.email }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="label">Телефон:</span>
+            <span class="value">{{ user.phone }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="label">Должность:</span>
+            <span class="value">{{ user.post }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="label">Отдел:</span>
+            <span class="value">{{ department_display }}</span>
+        </div>
+
+        {% if role_display %}
+        <div class="info-item">
+            <span class="label">Роль:</span>
+            <span class="value">{{ role_display }}</span>
+        </div>
+        {% endif %}
+
+        <div class="info-item">
+            <span class="label">Описание:</span>
+            <span class="value">{{ user.description }}</span>
+        </div>
+    </div>
+
+    <div class="profile-view-actions">
+        <a href="javascript:history.back()" class="btn-back">← Вернуться обратно</a>
+
+        {% if is_own_profile %}
+        <a href="{% url 'profile_edit' %}" class="btn-back">Редактировать</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

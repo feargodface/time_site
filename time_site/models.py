@@ -6,7 +6,6 @@ from django.conf import settings
 from datetime import datetime, date
 
 
-
 class Department(models.Model):
     name = models.CharField(max_length=100, unique=True)
     manager = models.ForeignKey(
@@ -158,3 +157,24 @@ class LeaveRequest(models.Model):
         verbose_name = "Заявка"
         verbose_name_plural = "Заявки"
         ordering = ['-submitted_at']
+
+
+class DepartmentWorkSchedule(models.Model):
+    department = models.OneToOneField("Department", on_delete=models.CASCADE, related_name="schedule")
+    work_start = models.TimeField()
+    work_end = models.TimeField()
+    working_days = models.CharField(
+        max_length=20,
+        default="0,1,2,3,4",
+        help_text="Дни недели, когда работает отдел: 0=Пн, ..., 6=Вс"
+    )
+
+    working_days = models.CharField(max_length=20)
+
+    def is_working_day(self, date):
+        return str(date.weekday()) in self.working_days.split(',')
+
+    def __str__(self):
+        return f"{self.department.name} — {self.work_start}–{self.work_end}"
+
+

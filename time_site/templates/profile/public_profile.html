@@ -7,8 +7,8 @@
         margin: 2rem auto;
         padding: 2rem;
         background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     }
 
     .public-profile-title {
@@ -20,21 +20,24 @@
     }
 
     .profile-info-item {
-        margin-bottom: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         padding: 0.75rem 1rem;
-        background-color: var(--secondary-color);
+        margin-bottom: 0.75rem;
+        background-color: #f5f7fa;
         border-left: 4px solid var(--primary-color);
-        border-radius: 6px;
+        border-radius: 0.5rem;
     }
 
     .profile-info-label {
         font-weight: 600;
         color: #333;
+        margin-right: 0.5rem;
     }
 
     .profile-info-value {
         color: #555;
-        margin-left: 0.5rem;
     }
 
     .back-button-container {
@@ -42,6 +45,21 @@
         margin-top: 2rem;
     }
 
+    .btn-back {
+        display: inline-block;
+        padding: 0.6rem 1.4rem;
+        background-color: #f0f2f7;
+        color: var(--primary-color);
+        font-weight: 500;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-back:hover {
+        background-color: #e0e7f4;
+        transform: translateX(-3px);
+    }
 </style>
 {% endblock %}
 
@@ -92,4 +110,48 @@
         </a>
     </div>
 </div>
+
+    <hr class="my-4">
+<h4 class="text-center mb-3">Статистика посещаемости (за {{ selected_period }} дней)</h4>
+
+<form method="get" class="mb-3 text-center">
+  <label>Период:
+    <select name="period" onchange="this.form.submit()" class="form-select d-inline-block w-auto ms-2">
+      <option value="7" {% if selected_period == 7 %}selected{% endif %}>7 дней</option>
+      <option value="30" {% if selected_period == 30 %}selected{% endif %}>30 дней</option>
+      <option value="90" {% if selected_period == 90 %}selected{% endif %}>3 месяца</option>
+      <option value="365" {% if selected_period == 365 %}selected{% endif %}>Год</option>
+    </select>
+  </label>
+</form>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Дата</th>
+      <th>Приход</th>
+      <th>Уход</th>
+      <th>Перерыв (мин)</th>
+      <th>Отработано (мин)</th>
+      <th>Примечание</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+    <tr>
+      <td>{{ log.date }}</td>
+      <td>{{ log.check_in|default:"—" }}</td>
+      <td>{{ log.check_out|default:"—" }}</td>
+      <td>{{ log.break_minutes }}</td>
+      <td>{{ log.worked_time_minutes }}</td>
+      <td>{{ log.note }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6" class="text-center">Нет записей</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}

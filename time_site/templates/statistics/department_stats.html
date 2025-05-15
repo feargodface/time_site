@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Статистика отдела: {{ department.name }}</h3>
+    <p class="text-muted">Период: {{ month }}</p>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Сотрудник</th>
+                <th>Отработано (дней)</th>
+                <th>Общее время (часы)</th>
+                <th>Среднее за день (часы)</th>
+                <th>Опозданий</th>
+                <th>Последний рабочий день</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in stats %}
+                <tr>
+                    <td>{{ stat.employee.get_full_name|default:stat.employee.username }}</td>
+                    <td>{{ stat.worked_days }}</td>
+                    <td>{{ stat.total_time|floatformat:2 }}</td>
+                    <td>{{ stat.avg_per_day|floatformat:2 }}</td>
+                    <td>{{ stat.late_days }}</td>
+                    <td>{{ stat.last_log }}</td>
+                </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Нет данных</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'export_department_excel' department.pk %}" class="btn btn-success me-2">
+            📥 Скачать Excel
+        </a>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            ← Назад
+        </a>
+    </div>
+
+</div>
+{% endblock %}

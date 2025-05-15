@@ -1,6 +1,20 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Department
+from .models import CustomUser, Department, DepartmentWorkSchedule
+
+
+class DepartmentWorkScheduleInline(admin.StackedInline):
+    model = DepartmentWorkSchedule
+    extra = 0
+    can_delete = False
+
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'manager')
+    search_fields = ('name',)
+    inlines = [DepartmentWorkScheduleInline]
+
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
@@ -22,8 +36,3 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('username', 'email', 'first_name', 'last_name')
     ordering = ('username',)
-
-@admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'manager')
-    search_fields = ('name',)

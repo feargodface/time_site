@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow-sm mb-4">
-    <div class="card-header bg-primary text-white">
+    <div class="card-header text-white" style="background-color: var(--secondary-color);">
       <h4 class="mb-0">Панель учета посещаемости</h4>
     </div>
     <div class="card-body">
@@ -23,7 +23,7 @@
         <div class="mb-3" style="max-width: 400px;">
           {{ form.note.label_tag }} {{ form.note }}
         </div>
-        <button type="submit" class="btn btn-success">Сохранить запись</button>
+        <button type="submit" class="btn-back">💾 Сохранить запись</button>
       </form>
     </div>
   </div>
@@ -66,12 +66,11 @@
     </div>
   </div>
 
-    <hr>
-    <div class="mt-4">
-      <h5>Заявки и уведомления</h5>
-      <a href="{% url 'leave_form' %}" class="btn btn-outline-primary me-2">Подать заявку</a>
-      <a href="{% url 'leave_list' %}" class="btn btn-outline-secondary">Мои заявки</a>
-    </div>
-
+  <hr>
+  <div class="mt-4">
+    <h5>Заявки и уведомления</h5>
+    <a href="{% url 'leave_form' %}" class="btn-back me-2">➕ Подать заявку</a>
+    <a href="{% url 'leave_list' %}" class="btn-back">📄 Мои заявки</a>
+  </div>
 </div>
 {% endblock %}

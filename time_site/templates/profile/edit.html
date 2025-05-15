@@ -1,41 +1,129 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+<style>
+    .profile-edit-container {
+        max-width: 700px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .profile-edit-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.6rem 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        background-color: #fdfdfd;
+        transition: border-color 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--primary-color);
+        outline: none;
+    }
+
+    .form-error {
+        color: #d9534f;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .readonly-field {
+        background-color: transparent;
+        border: none;
+        padding: 0.3rem 0;
+        color: #555;
+        font-size: 1rem;
+    }
+
+        .form-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .btn-back,
+    .btn-light {
+        display: inline-block;
+        padding: 0.6rem 1.4rem;
+        background-color: #a8b1c8;
+        color: var(--header-bg);
+        font-weight: 500;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-back:hover,
+    .btn-light:hover {
+        background-color: #e0e7f4;
+        transform: translateY(-3px);
+    }
+
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2 class="mb-4">Редактирование профиля <strong>{{ profile_user.username }}</strong></h2>
+<div class="profile-edit-container">
+    <h2 class="profile-edit-title">
+        Редактирование профиля <strong>{{ profile_user.get_full_name|default:profile_user.username }}</strong>
+    </h2>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <form method="post" novalidate>
-                {% csrf_token %}
+    <form method="post" novalidate>
+        {% csrf_token %}
 
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="text-danger small">{{ field.errors|striptags }}</div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-
-                {% if not form.fields.role and profile_user.role %}
-                    <div class="mb-3">
-                        <label class="form-label">Роль</label>
-                        <p class="form-control-plaintext">{{ profile_user.get_role_display }}</p>
-                    </div>
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="form-error">{{ field.errors|striptags }}</div>
                 {% endif %}
+            </div>
+        {% endfor %}
 
-                <div class="d-flex justify-content-between">
-                        <div class="back-button-container">
-                            <a href="javascript:history.back()" class="btn-back">
-                                ← Вернуться обратно
-                            </a>
-                        </div>
-                    <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-                </div>
-            </form>
+        {% if not form.fields.role and profile_user.role %}
+            <div class="form-group">
+                <label>Роль</label>
+                <p class="readonly-field">{{ profile_user.get_role_display }}</p>
+            </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <a href="javascript:history.back()" class="btn-back">← Вернуться обратно</a>
+            <button type="submit" class="btn-light">Сохранить изменения</button>
         </div>
-    </div>
+    </form>
 </div>
 {% endblock %}
