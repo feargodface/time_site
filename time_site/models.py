@@ -131,9 +131,11 @@ class WorkLog(models.Model):
 
 class LeaveRequest(models.Model):
     TYPE_CHOICES = [
-        ('отпуск', 'Отпуск'),
-        ('отгул', 'Отгул'),
-        ('командировка', 'Командировка'),
+        ('отпуск', 'Отпуск'),            # оплачивается
+        ('отгул', 'Отгул'),              # не оплачивается
+        ('командировка', 'Командировка'),# оплачивается
+        ('больничный', 'Больничный'),    # оплачивается
+        ('удалёнка', 'Удалёнка'),        # оплачивается
     ]
 
     STATUS_CHOICES = [
@@ -157,6 +159,7 @@ class LeaveRequest(models.Model):
         verbose_name = "Заявка"
         verbose_name_plural = "Заявки"
         ordering = ['-submitted_at']
+
 
 
 class DepartmentWorkSchedule(models.Model):

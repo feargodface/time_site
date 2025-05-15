@@ -6,7 +6,7 @@ from time_site.views.profile import profile_view, profile_edit, public_profile_v
 from time_site.views.statistics import my_statistics_view, department_statistics_view, export_department_excel
 from time_site.views.leave import (
     leave_form_view, leave_list_view, leave_edit_view, leave_delete_view,
-    leave_approval_list_view, approve_leave_view, reject_leave_view,
+    leave_approval_list_view, approve_leave_view, reject_leave_view, export_department_leaves_excel
 )
 
 
@@ -38,8 +38,9 @@ urlpatterns = [
     path('leave/my/', leave_list_view, name='leave_list'),
     path('leave/<int:pk>/edit/', leave_edit_view, name='leave_edit'),
     path('leave/<int:pk>/delete/', leave_delete_view, name='leave_delete'),
+    path('leaves/department/export/', export_department_leaves_excel, name='export_department_leaves_excel'),
 
-#---ЗАЯВКИ для руководителя
+    #---ЗАЯВКИ для руководителя
     path('leave/approval/', leave_approval_list_view, name='leave_approval_list'),
     path('leave/<int:pk>/approve/', approve_leave_view, name='leave_approve'),
     path('leave/<int:pk>/reject/', reject_leave_view, name='leave_reject'),

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from time_site.models import CustomUser, WorkLog
 from time_site.forms import ProfileEditForm
 from django.utils.timezone import now, timedelta
+from django.core.exceptions import PermissionDenied
 
 
 @login_required
@@ -40,10 +41,15 @@ def profile_edit(request):
 
     return render(request, 'profile/edit.html', {'form': form, 'profile_user': profile_user})
 
+
 def public_profile_view(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
 
-    period = request.GET.get('period', '30')  # по умолчанию 30 дней
+    # Только сам пользователь, руководитель или администратор может просматривать
+    if not (request.user == user or request.user.is_manager or request.user.is_admin):
+        raise PermissionDenied()
+
+    period = request.GET.get('period', '30')
     try:
         days = int(period)
     except ValueError:
