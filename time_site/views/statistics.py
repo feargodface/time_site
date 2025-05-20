@@ -6,7 +6,7 @@ from django.utils.timezone import now
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 from datetime import datetime, timedelta
-from time_site.models import Department, WorkLog, LeaveRequest
+from time_site.models import Department, WorkLog, LeaveRequest, TeamTask
 from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
 
 
@@ -51,7 +51,6 @@ def get_department_statistics(department):
         schedule = getattr(emp.department, 'schedule', None)
         log_by_date = {log.date: log for log in logs}
 
-        # Получаем все одобренные заявки этого сотрудника за период
         approved_leaves = LeaveRequest.objects.filter(
             user=emp,
             status='одобрено',
@@ -76,7 +75,6 @@ def get_department_statistics(department):
 
             log = log_by_date.get(current_date)
 
-            # Проверяем, есть ли одобренная заявка на этот день
             leave = next((leave for leave in approved_leaves if leave.start_date <= current_date <= leave.end_date), None)
             leave_type = leave.leave_type if leave else None
 
@@ -95,15 +93,11 @@ def get_department_statistics(department):
                     if log.check_in > allowed_lateness:
                         late_count += 1
             else:
-                # Если нет лога, то смотрим на заявку
                 if leave_type in PAID_LEAVE_TYPES:
-                    # Оплачиваемый день — учитываем как отработанный, но без времени
                     worked_days += 1
                 elif leave_type in UNPAID_LEAVE_TYPES:
-                    # Отгул — не считаем прогул, но и не учитываем как рабочий день
                     pass
                 else:
-                    # Нет лога и нет оплачиваемой заявки — считаем прогулом
                     absenteeism_count += 1
 
             current_date += timedelta(days=1)
@@ -120,6 +114,15 @@ def get_department_statistics(department):
             'absenteeism': absenteeism_count,
             'last_log': logs.first().date if logs.exists() else "—"
         }
+
+        completed_tasks_count = TeamTask.objects.filter(
+            assigned_to=emp,
+            status='завершена',
+            department=department
+        ).count()
+
+        stat['completed_tasks'] = completed_tasks_count
+
         return stat
 
     if manager:
@@ -160,7 +163,11 @@ def export_department_excel(request, pk):
     ws = wb.active
     ws.title = "Статистика отдела"
 
-    headers = ["Сотрудник", "Роль", "Отработано (дней)", "Общее время (часы)", "Среднее за день (часы)", "Опозданий", "Послед. рабочий день"]
+    headers = [
+        "Сотрудник", "Роль", "Отработано (дней)", "Общее время (часы)",
+        "Среднее за день (часы)", "Опозданий", "Послед. рабочий день", "Задач выполнено"
+    ]
+
     ws.append(headers)
 
     header_font = Font(bold=True)
@@ -186,7 +193,8 @@ def export_department_excel(request, pk):
             round(stat['total_time'], 2),
             round(stat['avg_per_day'], 2),
             stat['late_days'],
-            str(stat['last_log']) + (f" | Прогулов: {stat['absenteeism']}" if stat['absenteeism'] else "")
+            str(stat['last_log']) + (f" | Прогулов: {stat['absenteeism']}" if stat['absenteeism'] else ""),
+            stat['completed_tasks']
         ]
         ws.append(row)
         for idx, cell in enumerate(ws[ws.max_row]):

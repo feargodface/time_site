@@ -7,6 +7,7 @@
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.css">
 
     <!-- Основные стили -->
     <style>
@@ -40,139 +41,19 @@
             padding: 1.5rem 0;
         }
 
-        /* Просмотр профиля */
-        .profile-view-container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .navbar .nav-link {
+            font-weight: 500;
+            color: white;
+            transition: color 0.3s;
         }
 
-        .profile-view-info {
-            margin-bottom: 1.5rem;
+        .navbar .nav-link:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
         }
 
-        .profile-view-info .info-item {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .profile-view-info .label {
-            font-weight: bold;
-            display: inline-block;
-            min-width: 120px;
-            color: var(--primary-color);
-        }
-
-        .profile-view-info .value {
-            color: #555;
-        }
-
-        .profile-view-actions {
-            margin-top: 1.5rem;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .profile-view-actions .btn {
-            padding: 0.75rem 1.25rem;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .profile-view-actions .btn-secondary {
-            background-color: #6e6e6e;
-            border: none;
-        }
-
-        .profile-view-actions .btn-secondary:hover {
-            background-color: #454545;
-        }
-
-        /* Редактирование профиля */
-        .profile-edit-container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .profile-edit-form .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .profile-edit-form .form-group label {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .profile-edit-form .form-control {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #909090;
-            border-radius: 4px;
-        }
-
-        .profile-edit-form textarea.form-control {
-            min-height: 100px;
-        }
-
-        .profile-edit-actions {
-            margin-top: 1.5rem;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .profile-edit-actions .btn {
-            padding: 0.75rem 1.25rem;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .profile-edit-form .form-control:focus {
-            border-color: var(--primary-color);
-        }
-
-        .profile-edit-form .btn-primary {
-            background-color: var(--primary-color);
-            border: none;
-        }
-
-        .profile-edit-form .btn-primary:hover {
-            background-color: var(--accent-color);
-        }
-
-        .profile-edit-form .btn-secondary {
-            background-color: #f0f1f3;
-            border: none;
-        }
-
-        .profile-edit-form .btn-secondary:hover {
-            background-color: #e0e1e5;
-        }
-
-        .btn-back {
-            padding: 0.6rem 1.5rem;
-            background-color: #a8b1c8;
-            color: var(--header-bg);
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-back:hover {
-            background-color: #e0e7f4;
-            transform: translateX(-3px);
-        }
-        </style>
+        /* Остальные стили пропущены для краткости, ты можешь оставить свои прежние */
+    </style>
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -187,6 +68,34 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_statistics' %}">
+                            <i class="bi bi-bar-chart-line"></i> Панель управления
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'department_list' %}">
+                            <i class="bi bi-people"></i> Отделы
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'work_schedules' %}">
+                            <i class="bi bi-calendar-check"></i> График работы отделов
+                        </a>
+                    </li>
+                    {% if user.role == "Руководитель" %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'leave_approval_list' %}">
+                            <i class="bi bi-clipboard-check"></i> Просмотр заявок
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
@@ -243,9 +152,8 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS + Icons -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.min.js"></script>
 
     {% block extra_js %}{% endblock %}
 </body>

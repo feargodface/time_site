@@ -161,7 +161,6 @@ class LeaveRequest(models.Model):
         ordering = ['-submitted_at']
 
 
-
 class DepartmentWorkSchedule(models.Model):
     department = models.OneToOneField("Department", on_delete=models.CASCADE, related_name="schedule")
     work_start = models.TimeField()
@@ -180,4 +179,44 @@ class DepartmentWorkSchedule(models.Model):
     def __str__(self):
         return f"{self.department.name} — {self.work_start}–{self.work_end}"
 
+
+class TeamTask(models.Model):
+    STATUS_CHOICES = [
+        ('свободна', 'Свободна'),
+        ('в работе', 'В работе'),
+        ('завершена', 'Завершена'),
+    ]
+
+    title = models.CharField("Название задачи", max_length=200)
+    description = models.TextField("Описание", blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='created_tasks',
+        verbose_name="Создатель"
+    )
+    assigned_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='assigned_tasks',
+        verbose_name="Исполнитель"
+    )
+    department = models.ForeignKey(
+        'Department',
+        on_delete=models.CASCADE,
+        verbose_name="Отдел"
+    )
+    start_date = models.DateField("Дата начала", default=timezone.now)
+    due_date = models.DateField("Срок сдачи")
+    status = models.CharField("Статус", max_length=20, choices=STATUS_CHOICES, default='свободна')
+
+    class Meta:
+        verbose_name = "Задача команды"
+        verbose_name_plural = "Задачи команды"
+        ordering = ['due_date']
+
+    def __str__(self):
+        return f"{self.title} — {self.get_status_display()}"
 

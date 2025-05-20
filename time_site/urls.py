@@ -8,7 +8,9 @@ from time_site.views.leave import (
     leave_form_view, leave_list_view, leave_edit_view, leave_delete_view,
     leave_approval_list_view, approve_leave_view, reject_leave_view, export_department_leaves_excel
 )
-
+from time_site.views.dashboard import dashboard_view
+from time_site.views import task_track
+from time_site.views import shedule
 
 
 urlpatterns = [
@@ -45,4 +47,17 @@ urlpatterns = [
     path('leave/<int:pk>/approve/', approve_leave_view, name='leave_approve'),
     path('leave/<int:pk>/reject/', reject_leave_view, name='leave_reject'),
 
+    #---дашбоард
+    path('dashboard/', dashboard_view, name='my_stats'),
+
+    #---таск трекер
+    path('tasks/', task_track.task_list, name='task_list'),
+    path('tasks/create/', task_track.create_task, name='create_task'),
+    path('tasks/<int:task_id>/take/', task_track.take_task, name='take_task'),
+    path('tasks/<int:task_id>/complete/', task_track.complete_task, name='complete_task'),
+    path('tasks/<int:task_id>/edit/', task_track.edit_task, name='edit_task'),
+    path('tasks/<int:task_id>/delete/', task_track.delete_task, name='delete_task'),
+
+    #---рабочий график
+    path("schedules/", shedule.work_schedules_view, name="work_schedules"),
 ]

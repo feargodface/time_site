@@ -22,26 +22,6 @@
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
 
-    .action-buttons .btn {
-        min-width: 200px;
-        margin: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    .btn-panel-soft {
-        background-color: #a8b1c8;
-        color: var(--header-bg);;
-        border: none;
-    }
-
-    .btn-panel-soft:hover {
-        background-color: #9fa7bc;
-        transform: translateX(-3px);
-    }
-
 </style>
 {% endblock %}
 
@@ -50,52 +30,52 @@
     <div class="container">
         <h1 class="display-4 fw-bold">Добро пожаловать в TimeTrack</h1>
         <p class="lead">Профессиональная система учета рабочего времени</p>
-        <div class="action-buttons mt-4">
-            {% if user.is_authenticated %}
-                <a href="{% url 'my_statistics' %}" class="btn btn-panel-soft">
-                    <i class="bi bi-bar-chart-line"></i> Панель управления
-                </a>
-                <a href="{% url 'department_list' %}" class="btn btn-panel-soft">
-                    <i class="bi bi-people"></i> Отделы
-                </a>
-                {% if user.role == "Руководитель" %}
-                    <a href="{% url 'leave_approval_list' %}" class="btn btn-panel-soft">
-                        <i class="bi bi-clipboard-check"></i> Просмотр заявок
-                    </a>
-                {% endif %}
-            {% endif %}
+        {% if user.is_authenticated %}
+        <div class="action-buttons mt-4 fs-1">
+            📈📊📋📅
         </div>
+        {% endif %}
     </div>
 </div>
 
 <div class="container">
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col">
-            <div class="card feature-card">
-                <div class="card-body text-center">
-                    <i class="bi bi-clock-history display-4 text-primary mb-3"></i>
-                    <h3>Учет времени</h3>
-                    <p>Точный контроль рабочего времени сотрудников</p>
+            <a href="{% url 'task_list' %}" style="text-decoration: none; color: inherit;">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-list-task display-4 text-primary mb-3"></i>
+                        <h3>Трекер задач</h3>
+                        <p>Просмотр и выбор задач, отслеживание выполнения</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col">
-            <div class="card feature-card">
-                <div class="card-body text-center">
-                    <i class="bi bi-bar-chart-line display-4 text-primary mb-3"></i>
-                    <h3>Отчеты</h3>
-                    <p>Детальная аналитика и отчетность</p>
+            <a href="{% url 'my_stats' %}" style="text-decoration: none; color: inherit;">
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-bar-chart-line display-4 text-primary mb-3"></i>
+                        <h3>Дашборд активности</h3>
+                        <p>Графики и диаграммы с разными метриками</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col">
-            <div class="card feature-card">
-                <div class="card-body text-center">
-                    <i class="bi bi-shield-lock display-4 text-primary mb-3"></i>
-                    <h3>Статистика</h3>
-                    <p>Просмотр статистики за последний месяц</p>
+            {% if user.is_authenticated and user.role == "Руководитель" %}
+                <a href="{% url 'department_statistics' user.department.pk %}" style="text-decoration: none; color: inherit;">
+            {% endif %}
+                <div class="card feature-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-shield-lock display-4 text-primary mb-3"></i>
+                        <h3>Статистика</h3>
+                        <p>Просмотр статистики за последний месяц</p>
+                    </div>
                 </div>
-            </div>
+            {% if user.is_authenticated and user.role == "Руководитель" %}
+                </a>
+            {% endif %}
         </div>
     </div>
 </div>

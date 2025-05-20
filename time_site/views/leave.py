@@ -169,3 +169,5 @@ def export_department_leaves_excel(request):
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     wb.save(response)
     return response
+
+

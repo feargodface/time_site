@@ -23,7 +23,9 @@
         <div class="mb-3" style="max-width: 400px;">
           {{ form.note.label_tag }} {{ form.note }}
         </div>
-        <button type="submit" class="btn-back">💾 Сохранить запись</button>
+        <button type="submit" class="btn btn-primary">
+          💾 Сохранить запись
+        </button>
       </form>
     </div>
   </div>
@@ -69,8 +71,8 @@
   <hr>
   <div class="mt-4">
     <h5>Заявки и уведомления</h5>
-    <a href="{% url 'leave_form' %}" class="btn-back me-2">➕ Подать заявку</a>
-    <a href="{% url 'leave_list' %}" class="btn-back">📄 Мои заявки</a>
+    <a href="{% url 'leave_form' %}" class="btn btn-outline-primary me-2">➕ Подать заявку</a>
+    <a href="{% url 'leave_list' %}" class="btn btn-outline-secondary">📄 Мои заявки</a>
   </div>
 </div>
 {% endblock %}

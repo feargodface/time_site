@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Дашборд активности</h2>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Использовано дней отпуска</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ used_leave_days }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Осталось дней отпуска</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ remaining_leave_days }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Всего дней отпуска в году</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{ total_leave_days }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h4>Часы работы по дням в текущем месяце</h4>
+        <canvas id="workHoursChart" height="100"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('workHoursChart').getContext('2d');
+const workHoursChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ dates|safe }},
+        datasets: [{
+            label: 'Часы работы',
+            data: {{ hours|safe }},
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            borderRadius: 4,
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 12,
+                title: {
+                    display: true,
+                    text: 'Часы'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Дата'
+                }
+            }
+        },
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

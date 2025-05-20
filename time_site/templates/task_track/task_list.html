@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Список задач</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <form method="get" class="d-flex align-items-center gap-2">
+            <label for="status" class="form-label mb-0">Фильтр по статусу:</label>
+            <select name="status" id="status" class="form-select" onchange="this.form.submit()">
+                <option value="" {% if not request.GET.status %}selected{% endif %}>Все</option>
+                <option value="свободна" {% if request.GET.status == 'свободна' %}selected{% endif %}>Свободные</option>
+                <option value="в работе" {% if request.GET.status == 'в работе' %}selected{% endif %}>В работе</option>
+                <option value="завершена" {% if request.GET.status == 'завершена' %}selected{% endif %}>Завершенные</option>
+            </select>
+        </form>
+
+        {% if user.role == "Руководитель" %}
+            <div class="text-center mt-4">
+                <a href="{% url 'create_task' %}" class="btn btn-success me-2">
+                    📝Создать задачу
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Срок</th>
+                <th>Статус</th>
+                <th>Ответственный</th>
+                <th>Отдел</th>
+                <th>Действие</th>
+                <th>Редактирование/удаление</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{{ task.get_status_display }}</td>
+                <td>{{ task.assigned_to.get_full_name|default:"—" }}</td>
+                <td>{{ task.department.name }}</td>
+                <td>
+                    {% if user == task.assigned_to and task.status == "в работе" %}
+                        <a href="{% url 'complete_task' task.id %}" class="btn btn-success btn-sm">Завершить</a>
+                    {% elif not task.assigned_to %}
+                        <a href="{% url 'take_task' task.id %}" class="btn btn-warning btn-sm">Взять</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user.is_authenticated and user.is_manager and not task.assigned_to %}
+                        <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-warning">Редактировать</a>
+                        <form action="{% url 'delete_task' task.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены, что хотите удалить эту задачу?');">Удалить</button>
+                        </form>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            ← Назад
+        </a>
+    </div>
+</div>
+{% endblock %}

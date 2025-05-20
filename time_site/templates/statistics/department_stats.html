@@ -15,6 +15,7 @@
                 <th>Среднее за день</th>
                 <th>Опозданий</th>
                 <th>Последний рабочий день</th>
+                <th>Задач выполнено</th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,7 @@
                             | Прогулов: {{ stat.absenteeism }}
                         {% endif %}
                     </td>
+                    <td>{{ stat.completed_tasks }}</td>
                 </tr>
             {% empty %}
                 <tr>

@@ -5,6 +5,7 @@ from .models import CustomUser
 from .models import WorkLog
 from .models import LeaveRequest
 from django.utils import translation
+from .models import TeamTask
 
 
 translation.activate("ru")
@@ -79,4 +80,29 @@ class LeaveRequestForm(forms.ModelForm):
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
             'reason': forms.Textarea(attrs={'rows': 3}),
+        }
+
+
+class TeamTaskForm(forms.ModelForm):
+    class Meta:
+        model = TeamTask
+        fields = ['title', 'description', 'start_date', 'due_date']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'due_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+
+class TakeTaskForm(forms.ModelForm):
+    class Meta:
+        model = TeamTask
+        fields = []
+
+
+class CompleteTaskForm(forms.ModelForm):
+    class Meta:
+        model = TeamTask
+        fields = ['status']
+        widgets = {
+            'status': forms.HiddenInput()
         }
